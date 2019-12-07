@@ -27,23 +27,23 @@ import java.util.List;
 
 public class SubCommand {
 
-    private String name;
+    private final String name;
     private List<String> aliases;
 
     private Collection<AliasFunction> aliasFunctions;
-    private Command parent;
-    private ISubCommandExecutor executor;
+    private final Command parent;
+    private final ISubCommandExecutor executor;
 
     public SubCommand(String name, List<String> aliases, Command parent, ISubCommandExecutor executor){
         this.name = name.toLowerCase();
         if(aliases != null){
-            List<String> processedAliases = new ArrayList<String>();
+            List<String> processedAliases = new ArrayList<>();
             for (String alias : aliases){
                 if(!alias.contains("-f")){
                     processedAliases.add(alias.toLowerCase());
-                    return;
+                    break;
                 }
-                if(this.aliasFunctions == null)this.aliasFunctions = new ArrayList<AliasFunction>();
+                if(this.aliasFunctions == null)this.aliasFunctions = new ArrayList<>();
                 AliasFunction aliasFunction = new AliasFunction(alias);
                 processedAliases.add(aliasFunction.getAlias().toLowerCase());
                 this.aliasFunctions.add(aliasFunction);
@@ -60,6 +60,10 @@ public class SubCommand {
 
     public String getName() {
         return name;
+    }
+
+    public boolean hasAliases(){
+        return aliases != null;
     }
 
     public List<String> getAliases() {

@@ -27,24 +27,21 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class Command {
 
     //Command information
-    private String name;
+    private final String name;
     private String description;
     private String usage;
     private List<String> aliases;
     private Plugin plugin;
 
     //Execution classes
-    private ICommandExecutor executor;
+    private final ICommandExecutor executor;
     private ITabCompleter tabCompleter;
-    private org.bukkit.command.Command bukkitCommand;
+    private final org.bukkit.command.Command bukkitCommand;
     private Collection<SubCommand> subCommands;
     private Collection<AliasFunction> aliasFunctions;
 
@@ -54,11 +51,13 @@ public class Command {
         if(description != null)this.description = description;
         if(usage != null)this.usage = usage;
         if(aliases != null) {
-            List<String> processedAliases = new ArrayList<String>();
+            List<String> processedAliases = new ArrayList<>();
             for (String alias : aliases) {
                 if(!alias.contains("-f")){
                     processedAliases.add(alias.toLowerCase());
-                    return;
+                    break;
+                    //I am going to keep this note here, for my future self to understand my current stupidity!
+                    //This was a return one, and that's why I wasted a whole day finding it out!
                 }
                 if(this.aliasFunctions == null)this.aliasFunctions = new ArrayList<>();
                 AliasFunction aliasFunction = new AliasFunction(alias);
@@ -74,10 +73,8 @@ public class Command {
             for (SubCommandBuilder subCommand : subCommands)this.subCommands.add(subCommand.setParent(this).build());
         }
         if(plugin == null){
-            Bukkit.getLogger().info("Using BukkitCommand");
             this.bukkitCommand = new BukkitCommand(this.name, this);
         }else{
-            Bukkit.getLogger().info("Using BukkitPluginCommand");
             this.bukkitCommand = new BukkitPluginCommand(name, this, plugin);
             this.plugin = plugin;
         }
@@ -97,9 +94,9 @@ public class Command {
         public boolean execute(CommandSender commandSender, String label, String[] args) {
             if(args.length >= 1 && parent.subCommands != null){
                 for (SubCommand subCommand : parent.subCommands){
-                    if(args[0].equals(subCommand.getName()) || subCommand.getAliases().contains(args[0])){
-                        List<String> argsList = Arrays.asList(args);
-                        argsList.remove(args[0]);
+                    if(args[0].equals(subCommand.getName()) || (subCommand.hasAliases() && subCommand.getAliases().contains(args[0]))){
+                        List<String> argsList = new LinkedList<>(Arrays.asList(args));
+                        argsList.remove(0);
                         String[] subArgs = argsList.toArray(new String[0]);
                         return subCommand.execute(commandSender, label, subArgs);
                     }
@@ -130,9 +127,9 @@ public class Command {
         public boolean execute(CommandSender commandSender, String label, String[] args) {
             if(args.length >= 1 && parent.subCommands != null){
                 for (SubCommand subCommand : parent.subCommands){
-                    if(args[0].equals(subCommand.getName()) || subCommand.getAliases().contains(args[0])){
-                        List<String> argsList = Arrays.asList(args);
-                        argsList.remove(args[0]);
+                    if(args[0].equals(subCommand.getName()) || (subCommand.hasAliases() && subCommand.getAliases().contains(args[0]))){
+                        List<String> argsList = new LinkedList<>(Arrays.asList(args));
+                        argsList.remove(0);
                         String[] subArgs = argsList.toArray(new String[0]);
                         return subCommand.execute(commandSender, label, subArgs);
                     }
