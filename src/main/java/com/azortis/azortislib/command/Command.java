@@ -21,6 +21,7 @@ package com.azortis.azortislib.command;
 import com.azortis.azortislib.command.builders.SubCommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.azortislib.command.executors.ITabCompleter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
@@ -59,7 +60,7 @@ public class Command {
                     processedAliases.add(alias.toLowerCase());
                     return;
                 }
-                if(this.aliasFunctions == null)this.aliasFunctions = new ArrayList<AliasFunction>();
+                if(this.aliasFunctions == null)this.aliasFunctions = new ArrayList<>();
                 AliasFunction aliasFunction = new AliasFunction(alias);
                 this.aliasFunctions.add(aliasFunction);
                 processedAliases.add(aliasFunction.getAlias().toLowerCase());
@@ -69,21 +70,18 @@ public class Command {
         this.executor = executor;
         if(tabCompleter != null)this.tabCompleter = tabCompleter;
         if(subCommands != null) {
-            this.subCommands = new ArrayList<SubCommand>();
+            this.subCommands = new ArrayList<>();
             for (SubCommandBuilder subCommand : subCommands)this.subCommands.add(subCommand.setParent(this).build());
         }
         if(plugin == null){
             this.bukkitCommand = new BukkitCommand(this.name, this);
-            bukkitCommand.setDescription(this.description);
-            bukkitCommand.setUsage(this.usage);
-            bukkitCommand.setAliases(this.aliases);
         }else{
             this.plugin = plugin;
             this.bukkitCommand = new BukkitPluginCommand(this.name, this, this.plugin);
-            bukkitCommand.setDescription(this.description);
-            bukkitCommand.setUsage(this.usage);
-            bukkitCommand.setAliases(this.aliases);
         }
+        bukkitCommand.setDescription(this.description);
+        bukkitCommand.setUsage(this.usage);
+        bukkitCommand.setAliases(this.aliases);
     }
 
     private class BukkitCommand extends org.bukkit.command.Command{
@@ -112,7 +110,7 @@ public class Command {
         @Override
         public List<String> tabComplete(CommandSender commandSender, String alias, String[] args, Location location) throws IllegalArgumentException {
             if(parent.tabCompleter != null)return parent.tabCompleter.tabComplete(commandSender, alias, args, location);
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
 
     }
@@ -145,7 +143,7 @@ public class Command {
         @Override
         public List<String> tabComplete(CommandSender commandSender, String alias, String[] args, Location location) throws IllegalArgumentException {
             if(parent.tabCompleter != null)return parent.tabCompleter.tabComplete(commandSender, alias, args, location);
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
 
         public Plugin getPlugin() {

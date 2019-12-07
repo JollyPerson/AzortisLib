@@ -25,13 +25,17 @@ import java.lang.reflect.Field;
 
 public class CommandInjector {
 
+    private static CommandMap commandMap;
+
     public static void injectCommand(Command command){
         try{
-            Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-            commandMapField.setAccessible(true);
-            CommandMap commandMap = (CommandMap)commandMapField.get(Bukkit.getServer());
-            commandMapField.setAccessible(false);
-            commandMap.register(command.getName(), command.getBukkitCommand());
+            if (commandMap == null) {
+                Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+                commandMapField.setAccessible(true);
+                commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
+            }
+            if(command.getPlugin() != null)commandMap.register(command.getPlugin().getName(), command.getBukkitCommand());
+            else commandMap.register(command.getName(), command.getBukkitCommand());
         }catch (NoSuchFieldException | IllegalAccessException ex){
             ex.printStackTrace();
         }
