@@ -44,7 +44,7 @@ public class Command {
     //Execution classes
     private ICommandExecutor executor;
     private ITabCompleter tabCompleter;
-    private org.bukkit.command.Command bukkitCommand;
+    private org.bukkit.command.defaults.BukkitCommand bukkitCommand;
     private Collection<SubCommand> subCommands;
     private Collection<AliasFunction> aliasFunctions;
 
@@ -74,17 +74,19 @@ public class Command {
             for (SubCommandBuilder subCommand : subCommands)this.subCommands.add(subCommand.setParent(this).build());
         }
         if(plugin == null){
+            Bukkit.getLogger().info("Using BukkitCommand");
             this.bukkitCommand = new BukkitCommand(this.name, this);
         }else{
+            Bukkit.getLogger().info("Using BukkitPluginCommand");
+            this.bukkitCommand = new BukkitPluginCommand(name, this, plugin);
             this.plugin = plugin;
-            this.bukkitCommand = new BukkitPluginCommand(this.name, this, this.plugin);
         }
-        if(this.description != null) bukkitCommand.setDescription(this.description);
-        if(this.usage != null) bukkitCommand.setUsage(this.usage);
-        if(this.aliases != null) bukkitCommand.setAliases(this.aliases);
+        if(description != null) bukkitCommand.setDescription(description);
+        if(usage != null) bukkitCommand.setUsage(usage);
+        if(aliases != null) bukkitCommand.setAliases(aliases);
     }
 
-    private class BukkitCommand extends org.bukkit.command.Command{
+    private class BukkitCommand extends org.bukkit.command.defaults.BukkitCommand {
         private Command parent;
 
         BukkitCommand(String name, Command parent){
@@ -115,7 +117,7 @@ public class Command {
 
     }
 
-    private class BukkitPluginCommand extends org.bukkit.command.Command implements PluginIdentifiableCommand{
+    private class BukkitPluginCommand extends org.bukkit.command.defaults.BukkitCommand implements PluginIdentifiableCommand{
         private Command parent;
         private Plugin plugin;
 
