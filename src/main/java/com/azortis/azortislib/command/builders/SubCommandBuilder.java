@@ -39,19 +39,19 @@ public class SubCommandBuilder {
     }
 
     public SubCommandBuilder addAlias(String alias){
-        if(this.aliases == null)this.aliases = new ArrayList<String>();
+        if(this.aliases == null)this.aliases = new ArrayList<>();
         aliases.add(alias);
         return this;
     }
 
     public SubCommandBuilder addAliases(String... aliases){
-        if(this.aliases == null)this.aliases = new ArrayList<String>();
+        if(this.aliases == null)this.aliases = new ArrayList<>();
         this.aliases.addAll(Arrays.asList(aliases));
         return this;
     }
 
     public SubCommandBuilder addAliases(List<String> aliases){
-        if(this.aliases == null)this.aliases = new ArrayList<String>();
+        if(this.aliases == null)this.aliases = new ArrayList<>();
         this.aliases.addAll(aliases);
         return this;
     }

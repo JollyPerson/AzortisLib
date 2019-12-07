@@ -18,5 +18,23 @@
 
 package com.azortis.azortislib.command;
 
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
+
+import java.lang.reflect.Field;
+
 public class CommandInjector {
+
+    public static void injectCommand(Command command){
+        try{
+            Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+            commandMapField.setAccessible(true);
+            CommandMap commandMap = (CommandMap)commandMapField.get(Bukkit.getServer());
+            commandMapField.setAccessible(false);
+            commandMap.register(command.getName(), command.getBukkitCommand());
+        }catch (NoSuchFieldException | IllegalAccessException ex){
+            ex.printStackTrace();
+        }
+    }
+
 }
