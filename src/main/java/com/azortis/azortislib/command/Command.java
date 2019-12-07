@@ -44,7 +44,7 @@ public class Command {
     //Execution classes
     private ICommandExecutor executor;
     private ITabCompleter tabCompleter;
-    private org.bukkit.command.defaults.BukkitCommand bukkitCommand;
+    private org.bukkit.command.Command bukkitCommand;
     private Collection<SubCommand> subCommands;
     private Collection<AliasFunction> aliasFunctions;
 
@@ -86,7 +86,7 @@ public class Command {
         if(aliases != null) bukkitCommand.setAliases(aliases);
     }
 
-    private class BukkitCommand extends org.bukkit.command.defaults.BukkitCommand {
+    private class BukkitCommand extends org.bukkit.command.Command {
         private Command parent;
 
         BukkitCommand(String name, Command parent){
@@ -117,7 +117,7 @@ public class Command {
 
     }
 
-    private class BukkitPluginCommand extends org.bukkit.command.defaults.BukkitCommand implements PluginIdentifiableCommand{
+    private class BukkitPluginCommand extends org.bukkit.command.Command implements PluginIdentifiableCommand{
         private Command parent;
         private Plugin plugin;
 
