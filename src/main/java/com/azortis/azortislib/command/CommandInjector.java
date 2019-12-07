@@ -27,15 +27,14 @@ public class CommandInjector {
 
     private static CommandMap commandMap;
 
-    public static void injectCommand(Command command){
+    public static void injectCommand(String fallBackPrefix, Command command){
         try{
             if (commandMap == null) {
                 Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
                 commandMapField.setAccessible(true);
                 commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
             }
-            if(command.getPlugin() != null)commandMap.register(command.getPlugin().getName(), command.getBukkitCommand());
-            else commandMap.register(command.getName(), command.getBukkitCommand());
+            commandMap.register(fallBackPrefix, command.getBukkitCommand());
         }catch (NoSuchFieldException | IllegalAccessException ex){
             ex.printStackTrace();
         }

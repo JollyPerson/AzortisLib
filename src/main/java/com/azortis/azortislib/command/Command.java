@@ -79,9 +79,9 @@ public class Command {
             this.plugin = plugin;
             this.bukkitCommand = new BukkitPluginCommand(this.name, this, this.plugin);
         }
-        bukkitCommand.setDescription(this.description);
-        bukkitCommand.setUsage(this.usage);
-        bukkitCommand.setAliases(this.aliases);
+        if(this.description != null) bukkitCommand.setDescription(this.description);
+        if(this.usage != null) bukkitCommand.setUsage(this.usage);
+        if(this.aliases != null) bukkitCommand.setAliases(this.aliases);
     }
 
     private class BukkitCommand extends org.bukkit.command.Command{
