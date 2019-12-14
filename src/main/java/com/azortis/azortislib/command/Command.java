@@ -21,7 +21,6 @@ package com.azortis.azortislib.command;
 import com.azortis.azortislib.command.builders.SubCommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.azortislib.command.executors.ITabCompleter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
@@ -108,7 +107,7 @@ public class Command {
 
         @Override
         public List<String> tabComplete(CommandSender commandSender, String alias, String[] args, Location location) throws IllegalArgumentException {
-            if(parent.tabCompleter != null)return parent.tabCompleter.tabComplete(commandSender, alias, args, location);
+            if(parent.tabCompleter != null)return parent.tabCompleter.onTabComplete(commandSender, parent, alias, args, location);
             return new ArrayList<>();
         }
 
@@ -141,7 +140,7 @@ public class Command {
 
         @Override
         public List<String> tabComplete(CommandSender commandSender, String alias, String[] args, Location location) throws IllegalArgumentException {
-            if(parent.tabCompleter != null)return parent.tabCompleter.tabComplete(commandSender, alias, args, location);
+            if(parent.tabCompleter != null)return parent.tabCompleter.onTabComplete(commandSender, parent, alias, args, location);
             return new ArrayList<>();
         }
 

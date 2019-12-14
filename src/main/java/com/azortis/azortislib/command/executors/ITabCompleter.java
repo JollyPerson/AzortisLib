@@ -18,6 +18,7 @@
 
 package com.azortis.azortislib.command.executors;
 
+import com.azortis.azortislib.command.Command;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
@@ -25,6 +26,6 @@ import java.util.List;
 
 public interface ITabCompleter {
 
-    List<String> tabComplete(CommandSender sender, String alias, String[] args, Location location);
+    List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args, Location location);
 
 }

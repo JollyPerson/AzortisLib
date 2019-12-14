@@ -70,6 +70,10 @@ public class SubCommand {
         return aliases;
     }
 
+    public Collection<AliasFunction> getAliasFunctions() {
+        return aliasFunctions;
+    }
+
     public Command getParent() {
         return parent;
     }
