@@ -21,6 +21,7 @@ package com.azortis.azortislib.command;
 import com.azortis.azortislib.command.builders.SubCommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.azortislib.command.executors.ITabCompleter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
@@ -93,7 +94,7 @@ public class Command {
         public boolean execute(CommandSender commandSender, String label, String[] args) {
             if(args.length >= 1 && parent.subCommands != null){
                 for (SubCommand subCommand : parent.subCommands){
-                    if(args[0].equals(subCommand.getName()) || (subCommand.hasAliases() && subCommand.getAliases().contains(args[0]))){
+                    if(args[0].equalsIgnoreCase(subCommand.getName()) || (subCommand.hasAliases() && subCommand.getAliases().contains(args[0].toLowerCase()))){
                         List<String> argsList = new LinkedList<>(Arrays.asList(args));
                         argsList.remove(0);
                         String[] subArgs = argsList.toArray(new String[0]);
@@ -126,7 +127,8 @@ public class Command {
         public boolean execute(CommandSender commandSender, String label, String[] args) {
             if(args.length >= 1 && parent.subCommands != null){
                 for (SubCommand subCommand : parent.subCommands){
-                    if(args[0].equals(subCommand.getName()) || (subCommand.hasAliases() && subCommand.getAliases().contains(args[0]))){
+                    if(args[0].equalsIgnoreCase(subCommand.getName()) || (subCommand.hasAliases() && subCommand.getAliases().contains(args[0].toLowerCase()))){
+                        Bukkit.getLogger().info("Az2");
                         List<String> argsList = new LinkedList<>(Arrays.asList(args));
                         argsList.remove(0);
                         String[] subArgs = argsList.toArray(new String[0]);
