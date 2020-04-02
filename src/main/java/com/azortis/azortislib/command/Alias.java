@@ -22,11 +22,10 @@ public class Alias {
 
     private String alias;
     private String function;
-    private String subCommand;
 
     public Alias(String rawInput){
-        alias = rawInput.split("-f")[0];
-        function = rawInput.split("-f")[1];
+        alias = rawInput.split("-f")[0].trim();
+        function = rawInput.split("-f")[1].trim();
     }
 
     public String getAlias() {

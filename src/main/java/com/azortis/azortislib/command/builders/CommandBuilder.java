@@ -21,6 +21,7 @@ package com.azortis.azortislib.command.builders;
 import com.azortis.azortislib.command.Command;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.azortislib.command.executors.ITabCompleter;
+import com.sun.istack.internal.NotNull;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class CommandBuilder {
     private ITabCompleter tabCompleter;
     private Collection<SubCommandBuilder> subCommands;
 
-    public CommandBuilder setName(String name) {
+    public CommandBuilder setName(@NotNull String name) {
         this.name = name;
         return this;
     }
@@ -89,12 +90,12 @@ public class CommandBuilder {
         return this;
     }
 
-    public CommandBuilder setExecutor(ICommandExecutor executor){
+    public CommandBuilder setExecutor(@NotNull ICommandExecutor executor){
         this.executor = executor;
         return this;
     }
 
-    public CommandBuilder setTabCompleter(ITabCompleter tabCompleter){
+    public CommandBuilder setTabCompleter(@NotNull ITabCompleter tabCompleter){
         this.tabCompleter = tabCompleter;
         return this;
     }
