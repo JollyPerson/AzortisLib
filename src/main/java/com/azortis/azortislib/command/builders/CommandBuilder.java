@@ -35,6 +35,7 @@ public class CommandBuilder {
     private String description;
     private String usage;
     private List<String> aliases;
+    private String permission;
     private Plugin plugin;
 
     //Execution classes
@@ -58,20 +59,28 @@ public class CommandBuilder {
     }
 
     public CommandBuilder addAlias(String alias){
+        if(alias == null)return this;
         if(this.aliases == null)this.aliases = new ArrayList<>();
         aliases.add(alias);
         return this;
     }
 
     public CommandBuilder addAliases(String... aliases){
+        if(aliases == null)return this;
         if(this.aliases == null)this.aliases = new ArrayList<>();
         this.aliases.addAll(Arrays.asList(aliases));
         return this;
     }
 
     public CommandBuilder addAliases(List<String> aliases){
+        if(aliases == null)return this;
         if(this.aliases == null)this.aliases = new ArrayList<>();
         this.aliases.addAll(aliases);
+        return this;
+    }
+
+    public CommandBuilder setPermission(String permission) {
+        this.permission = permission;
         return this;
     }
 
@@ -109,7 +118,7 @@ public class CommandBuilder {
     }
 
     public Command build(){
-        return new Command(this.name, this.description, this.usage, this.aliases, this.plugin, this.executor
+        return new Command(this.name, this.description, this.usage, this.aliases, this.permission, this.plugin, this.executor
                 , this.tabCompleter, this.subCommands);
     }
 

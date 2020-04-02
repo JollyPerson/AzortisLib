@@ -21,16 +21,14 @@ package com.azortis.azortislib.command;
 import com.azortis.azortislib.command.executors.ISubCommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class SubCommand {
 
     private final String name;
     private List<String> aliases;
 
-    private Collection<AliasFunction> aliasFunctions;
+    private Map<String, Alias> aliasesMap;
     private final Command parent;
     private final ISubCommandExecutor executor;
 
@@ -43,10 +41,10 @@ public class SubCommand {
                     processedAliases.add(alias.toLowerCase());
                     break;
                 }
-                if(this.aliasFunctions == null)this.aliasFunctions = new ArrayList<>();
-                AliasFunction aliasFunction = new AliasFunction(alias);
+                if(this.aliasesMap == null)this.aliasesMap = new HashMap<>();
+                Alias aliasFunction = new Alias(alias);
                 processedAliases.add(aliasFunction.getAlias().toLowerCase());
-                this.aliasFunctions.add(aliasFunction);
+                this.aliasesMap.put(aliasFunction.getAlias(), aliasFunction);
             }
             this.aliases = processedAliases;
         }
@@ -70,8 +68,12 @@ public class SubCommand {
         return aliases;
     }
 
-    public Collection<AliasFunction> getAliasFunctions() {
-        return aliasFunctions;
+    public Map<String, Alias> getAliasesMap() {
+        return aliasesMap;
+    }
+
+    public Alias getAlias(String alias){
+        return aliasesMap.get(alias);
     }
 
     public Command getParent() {

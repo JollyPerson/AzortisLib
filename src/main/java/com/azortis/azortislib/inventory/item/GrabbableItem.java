@@ -16,23 +16,10 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.azortislib.command;
+package com.azortis.azortislib.inventory.item;
 
-public class AliasFunction {
+public class GrabbableItem extends InventoryItem{
 
-    private String alias;
-    private String function;
 
-    public AliasFunction(String rawInput){
-        alias = rawInput.split("-f")[0];
-        function = rawInput.split("-f")[1];
-    }
 
-    public String getAlias() {
-        return alias;
-    }
-
-    public String getFunction() {
-        return function;
-    }
 }

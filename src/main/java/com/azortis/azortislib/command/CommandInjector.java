@@ -19,22 +19,42 @@
 package com.azortis.azortislib.command;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandMap;
+import org.bukkit.command.SimpleCommandMap;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 
 public class CommandInjector {
 
-    private static CommandMap commandMap;
-
-    public static void injectCommand(String fallBackPrefix, Command command){
+    @SuppressWarnings("unchecked")
+    public static void injectCommand(String fallBackPrefix, Command command, boolean override){
         try{
-            if (commandMap == null) {
-                Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-                commandMapField.setAccessible(true);
-                commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
+            Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+            commandMapField.setAccessible(true);
+            SimpleCommandMap commandMap = (SimpleCommandMap) commandMapField.get(Bukkit.getServer());
+            if(override && commandMap.getCommand(command.getName()) != null){
+                org.bukkit.command.Command conflictCommand = commandMap.getCommand(command.getName());
+                List<String> conflictCommandAliases = new ArrayList<>();
+                assert conflictCommand != null;
+                if(!conflictCommand.getAliases().isEmpty())
+                    conflictCommandAliases.addAll(conflictCommand.getAliases());
+
+                Field knownCommandsField = commandMap.getClass().getDeclaredField("knownCommands");
+                knownCommandsField.setAccessible(true);
+                Map<String, org.bukkit.command.Command> knownCommands = (Map<String, org.bukkit.command.Command>) knownCommandsField.get(commandMap);
+                knownCommands.remove(conflictCommand.getName());
+                if(!conflictCommandAliases.isEmpty()){
+                    for (String alias : conflictCommandAliases){
+                        knownCommands.remove(alias);
+                    }
+                }
+                knownCommandsField.setAccessible(false);
             }
             commandMap.register(fallBackPrefix, command.getBukkitCommand());
+            commandMapField.setAccessible(false);
         }catch (NoSuchFieldException | IllegalAccessException ex){
             ex.printStackTrace();
         }

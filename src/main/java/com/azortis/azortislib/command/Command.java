@@ -21,7 +21,6 @@ package com.azortis.azortislib.command;
 import com.azortis.azortislib.command.builders.SubCommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.azortislib.command.executors.ITabCompleter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
@@ -36,6 +35,7 @@ public class Command {
     private String description;
     private String usage;
     private List<String> aliases;
+    private String permission;
     private Plugin plugin;
 
     //Execution classes
@@ -43,9 +43,9 @@ public class Command {
     private ITabCompleter tabCompleter;
     private final org.bukkit.command.Command bukkitCommand;
     private Collection<SubCommand> subCommands;
-    private Collection<AliasFunction> aliasFunctions;
+    private Map<String, Alias> aliasesMap;
 
-    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin
+    public Command(String name, String description, String usage, List<String> aliases, String permission, Plugin plugin
             , ICommandExecutor executor, ITabCompleter tabCompleter, Collection<SubCommandBuilder> subCommands){
         this.name = name.toLowerCase();
         if(description != null)this.description = description;
@@ -59,13 +59,14 @@ public class Command {
                     //I am going to keep this note here, for my future self to understand my current stupidity!
                     //This was a return one, and that's why I wasted a whole day finding it out!
                 }
-                if(this.aliasFunctions == null)this.aliasFunctions = new ArrayList<>();
-                AliasFunction aliasFunction = new AliasFunction(alias);
-                this.aliasFunctions.add(aliasFunction);
+                if(this.aliasesMap == null)this.aliasesMap = new HashMap<>();
+                Alias aliasFunction = new Alias(alias);
+                this.aliasesMap.put(aliasFunction.getAlias(), aliasFunction);
                 processedAliases.add(aliasFunction.getAlias().toLowerCase());
             }
             this.aliases = processedAliases;
         }
+        if(permission != null)this.permission = permission;
         this.executor = executor;
         if(tabCompleter != null)this.tabCompleter = tabCompleter;
         if(subCommands != null) {
@@ -81,6 +82,7 @@ public class Command {
         if(description != null) bukkitCommand.setDescription(description);
         if(usage != null) bukkitCommand.setUsage(usage);
         if(aliases != null) bukkitCommand.setAliases(aliases);
+        if(permission != null) bukkitCommand.setPermission(permission);
     }
 
     private class BukkitCommand extends org.bukkit.command.Command {
@@ -92,19 +94,8 @@ public class Command {
         }
 
         public boolean execute(CommandSender commandSender, String label, String[] args) {
-            if(args.length >= 1 && parent.subCommands != null){
-                for (SubCommand subCommand : parent.subCommands){
-                    if(args[0].equalsIgnoreCase(subCommand.getName()) || (subCommand.hasAliases() && subCommand.getAliases().contains(args[0].toLowerCase()))){
-                        List<String> argsList = new LinkedList<>(Arrays.asList(args));
-                        argsList.remove(0);
-                        String[] subArgs = argsList.toArray(new String[0]);
-                        return subCommand.execute(commandSender, label, subArgs);
-                    }
-                }
-            }
-            return parent.executor.onCommand(commandSender, parent, label, args);
+            return executeCommand(commandSender, label, args, parent);
         }
-
 
         @Override
         public List<String> tabComplete(CommandSender commandSender, String alias, String[] args, Location location) throws IllegalArgumentException {
@@ -125,18 +116,7 @@ public class Command {
         }
 
         public boolean execute(CommandSender commandSender, String label, String[] args) {
-            if(args.length >= 1 && parent.subCommands != null){
-                for (SubCommand subCommand : parent.subCommands){
-                    if(args[0].equalsIgnoreCase(subCommand.getName()) || (subCommand.hasAliases() && subCommand.getAliases().contains(args[0].toLowerCase()))){
-                        Bukkit.getLogger().info("Az2");
-                        List<String> argsList = new LinkedList<>(Arrays.asList(args));
-                        argsList.remove(0);
-                        String[] subArgs = argsList.toArray(new String[0]);
-                        return subCommand.execute(commandSender, label, subArgs);
-                    }
-                }
-            }
-            return parent.executor.onCommand(commandSender, parent, label, args);
+            return executeCommand(commandSender, label, args, parent);
         }
 
 
@@ -150,6 +130,20 @@ public class Command {
             return this.plugin;
         }
 
+    }
+
+    private boolean executeCommand(CommandSender commandSender, String label, String[] args, Command parent) {
+        if(args.length >= 1 && parent.subCommands != null){
+            for (SubCommand subCommand : parent.subCommands){
+                if(args[0].equalsIgnoreCase(subCommand.getName()) || (subCommand.hasAliases() && subCommand.getAliases().contains(args[0].toLowerCase()))){
+                    List<String> argsList = new LinkedList<>(Arrays.asList(args));
+                    argsList.remove(0);
+                    String[] subArgs = argsList.toArray(new String[0]);
+                    return subCommand.execute(commandSender, label, subArgs);
+                }
+            }
+        }
+        return parent.executor.onCommand(commandSender, parent, label, args);
     }
 
     public String getName() {
@@ -166,6 +160,10 @@ public class Command {
 
     public List<String> getAliases() {
         return aliases;
+    }
+
+    public String getPermission() {
+        return permission;
     }
 
     public Plugin getPlugin() {
@@ -188,7 +186,11 @@ public class Command {
         return subCommands;
     }
 
-    public Collection<AliasFunction> getAliasFunctions() {
-        return aliasFunctions;
+    public Map<String, Alias> getAliasesMap() {
+        return aliasesMap;
+    }
+
+    public Alias getAlias(String alias){
+        return aliasesMap.get(alias);
     }
 }
