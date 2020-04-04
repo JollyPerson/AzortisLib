@@ -16,8 +16,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.azortislib.inventory.object;
+package com.azortis.azortislib.inventory.item.action;
 
+import com.azortis.azortislib.inventory.item.action.Action;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
