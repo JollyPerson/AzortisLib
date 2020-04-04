@@ -18,6 +18,7 @@
 
 package com.azortis.azortislib.inventory.object;
 
+import com.azortis.azortislib.inventory.item.action.ButtonAction;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

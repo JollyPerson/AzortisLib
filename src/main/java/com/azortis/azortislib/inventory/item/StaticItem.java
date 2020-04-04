@@ -16,9 +16,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.azortislib.inventory.object;
+package com.azortis.azortislib.inventory.item;
 
-
-public interface Action<T> {
-    T action(Object... args);
+public class StaticItem {
 }
