@@ -16,13 +16,39 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.azortislib.inventory.item;
+package com.azortis.azortislib.inventory.object;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public class InventoryItem {
 
-    private String name;
-    private ItemStack itemStack;
+public class Button extends ItemStack {
+    private ButtonAction action;
 
+    @Override
+    public Button clone() {
+        Button stack = (Button) super.clone();
+        stack.action = action;
+        return stack;
+    }
+
+    public Button(ItemStack stack, ButtonAction action) throws IllegalArgumentException {
+        super(stack);
+        this.action = action;
+    }
+
+
+    public Button(Material type, ButtonAction action) {
+        super(type);
+        this.action = action;
+    }
+
+    public Button(Material type, int amount, ButtonAction action) {
+        super(type, amount);
+        this.action = action;
+    }
+
+    public ButtonAction getAction() {
+        return action;
+    }
 }

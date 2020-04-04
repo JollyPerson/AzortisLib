@@ -16,10 +16,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.azortislib.inventory.item;
-
-public class ClickableItem extends InventoryItem{
+package com.azortis.azortislib.inventory.object;
 
 
-
+public interface Action<T> {
+    T action(Object... args);
 }

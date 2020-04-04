@@ -16,10 +16,17 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.azortislib.inventory.item;
+package com.azortis.azortislib.inventory;
 
-public class GrabbableItem extends InventoryItem{
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.InventoryHolder;
 
 
+public interface Menu extends InventoryHolder {
+    boolean onClick(Player player, int slot, ClickType type);
 
+    void onOpen(Player player);
+
+    void onClose(Player player);
 }

@@ -16,7 +16,12 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.azortislib.inventory;
+package com.azortis.azortislib.inventory.object;
 
-public class Inventory {
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+
+
+public interface ButtonAction extends Action {
+    void action(Player player, ClickType type);
 }
