@@ -22,6 +22,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
 
-public interface ButtonAction extends Action {
+public interface ButtonAction {
     void action(Player player, ClickType type);
 }
