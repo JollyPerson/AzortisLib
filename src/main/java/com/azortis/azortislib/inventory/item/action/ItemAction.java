@@ -18,11 +18,10 @@
 
 package com.azortis.azortislib.inventory.item.action;
 
-import com.azortis.azortislib.inventory.item.action.Action;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
 
-public interface ButtonAction {
-    void action(Player player, ClickType type);
+public interface ItemAction {
+    boolean action(Player player, ClickType type);
 }

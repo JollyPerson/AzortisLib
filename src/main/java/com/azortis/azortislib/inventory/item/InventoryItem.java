@@ -18,5 +18,37 @@
 
 package com.azortis.azortislib.inventory.item;
 
-public abstract class InventoryItem {
+import com.azortis.azortislib.inventory.item.action.ItemAction;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
+public class InventoryItem extends ItemStack {
+    private ItemAction action;
+
+    @Override
+    public InventoryItem clone() {
+        InventoryItem stack = (InventoryItem) super.clone();
+        stack.action = action;
+        return stack;
+
+    }
+    public InventoryItem(ItemStack stack, ItemAction action) throws IllegalArgumentException {
+        super(stack);
+        this.action = action;
+    }
+
+
+    public InventoryItem(Material type, ItemAction action) {
+        super(type);
+        this.action = action;
+    }
+
+    public InventoryItem(Material type, int amount, ItemAction action) {
+        super(type, amount);
+        this.action = action;
+    }
+
+    public ItemAction getAction() {
+        return action;
+    }
 }

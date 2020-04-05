@@ -18,7 +18,8 @@
 
 package com.azortis.azortislib.inventory.item.action;
 
+import org.bukkit.entity.Player;
 
-public interface Action<T> {
-    T action(Object... args);
+public interface InventoryAction {
+    boolean action(Player player);
 }

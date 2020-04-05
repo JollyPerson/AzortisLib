@@ -18,15 +18,29 @@
 
 package com.azortis.azortislib.inventory;
 
+
+import com.azortis.azortislib.inventory.item.InventoryItem;
+import com.azortis.azortislib.inventory.item.action.InventoryAction;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-
 public interface Menu extends InventoryHolder {
-    boolean onClick(Player player, int slot, ClickType type);
+    InventoryAction getOpenAction();
 
-    void onOpen(Player player);
+    InventoryAction getCloseAction();
 
-    void onClose(Player player);
+    String getTitle();
+
+    Inventory getInventory();
+
+    InventoryItem[] getItems();
+
+    default void openInventory(Player player) {
+        new Window(player, this);
+    }
+
+    void addItem(InventoryItem item, int slot);
+
+    void removeItem(int slot);
 }

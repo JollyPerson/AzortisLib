@@ -18,47 +18,74 @@
 
 package com.azortis.azortislib.inventory;
 
+import com.azortis.azortislib.inventory.item.InventoryItem;
+import com.azortis.azortislib.inventory.item.action.InventoryAction;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
 
 public class BaseMenu implements Menu {
     private final Inventory inventory;
+    private InventoryItem[] inventoryItems;
+    private String title;
 
     private BaseMenu(int size, String title) {
         inventory = Bukkit.createInventory(this, size, title);
+        this.title = title;
+        inventoryItems = new InventoryItem[size];
     }
 
     private BaseMenu(int size) {
         inventory = Bukkit.createInventory(this, size);
+        inventoryItems = new InventoryItem[size];
     }
 
     private BaseMenu(InventoryType type, String title) {
         inventory = Bukkit.createInventory(this, type, title);
+        this.title = title;
+        inventoryItems = new InventoryItem[inventory.getSize()];
     }
 
     private BaseMenu(InventoryType type) {
         inventory = Bukkit.createInventory(this, type);
-    }
-
-    @Override
-    public boolean onClick(Player player, int slot, ClickType type) {
-        return true;
-    }
-
-    @Override
-    public void onOpen(Player player) {
-    }
-
-    @Override
-    public void onClose(Player player) {
+        inventoryItems = new InventoryItem[inventory.getSize()];
     }
 
     @Override
     public Inventory getInventory() {
         return inventory;
     }
+
+    @Override
+    public InventoryAction getOpenAction() {
+        return player -> false;
+    }
+
+    @Override
+    public InventoryAction getCloseAction() {
+        return player -> false;
+    }
+
+    @Override
+    public void addItem(InventoryItem item, int slot) {
+        inventoryItems[slot] = item;
+    }
+
+    @Override
+    public void removeItem(int slot) {
+        inventoryItems[slot] = new InventoryItem(Material.AIR, (player, type) -> true);
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public InventoryItem[] getItems() {
+        return inventoryItems;
+    }
+
 }
