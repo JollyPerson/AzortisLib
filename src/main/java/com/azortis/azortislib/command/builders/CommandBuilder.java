@@ -21,8 +21,8 @@ package com.azortis.azortislib.command.builders;
 import com.azortis.azortislib.command.Command;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.azortislib.command.executors.ITabCompleter;
-import com.sun.istack.internal.NotNull;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
