@@ -21,7 +21,6 @@ package com.azortis.azortislib.inventory.item.action;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
-
 public interface ItemAction {
     boolean action(Player player, ClickType type);
 }
