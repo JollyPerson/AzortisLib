@@ -20,8 +20,8 @@ package com.azortis.azortislib.command;
 
 public class Alias {
 
-    private String alias;
-    private String function;
+    private final String alias;
+    private final String function;
 
     public Alias(String rawInput){
         alias = rawInput.split("-f")[0].trim();

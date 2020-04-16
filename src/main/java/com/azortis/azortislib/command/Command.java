@@ -110,19 +110,19 @@ public class Command {
      * The {@link org.bukkit.command.Command} class if no plugin is specified.
      */
     private class BukkitCommand extends org.bukkit.command.Command {
-        private Command parent;
+        private final Command parent;
 
         BukkitCommand(String name, Command parent){
             super(name);
             this.parent = parent;
         }
 
-        public boolean execute(CommandSender commandSender, String label, String[] args) {
+        public boolean execute(@NotNull CommandSender commandSender, @NotNull String label, String[] args) {
             return executeCommand(commandSender, label, args);
         }
 
         @Override
-        public List<String> tabComplete(CommandSender commandSender, String alias, String[] args, Location location) throws IllegalArgumentException {
+        public @NotNull List<String> tabComplete(@NotNull CommandSender commandSender, @NotNull String alias, String[] args, Location location) throws IllegalArgumentException {
             if(parent.tabCompleter != null)return parent.tabCompleter.onTabComplete(commandSender, parent, alias, args, location);
             return new ArrayList<>();
         }
@@ -133,8 +133,8 @@ public class Command {
      * The {@link org.bukkit.command.Command} class is a plugin is specified.
      */
     private class BukkitPluginCommand extends org.bukkit.command.Command implements PluginIdentifiableCommand{
-        private Command parent;
-        private Plugin plugin;
+        private final Command parent;
+        private final Plugin plugin;
 
         public BukkitPluginCommand(String name, Command parent, Plugin plugin){
             super(name);
@@ -142,18 +142,18 @@ public class Command {
             this.plugin = plugin;
         }
 
-        public boolean execute(CommandSender commandSender, String label, String[] args) {
+        public boolean execute(@NotNull CommandSender commandSender, String label, String[] args) {
             return executeCommand(commandSender, label, args);
         }
 
 
         @Override
-        public List<String> tabComplete(CommandSender commandSender, String alias, String[] args, Location location) throws IllegalArgumentException {
+        public @NotNull List<String> tabComplete(@NotNull CommandSender commandSender, @NotNull String alias, String[] args, Location location) throws IllegalArgumentException {
             if(parent.tabCompleter != null)return parent.tabCompleter.onTabComplete(commandSender, parent, alias, args, location);
             return new ArrayList<>();
         }
 
-        public Plugin getPlugin() {
+        public @NotNull Plugin getPlugin() {
             return this.plugin;
         }
 
