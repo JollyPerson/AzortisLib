@@ -16,11 +16,22 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.azortislib.inventory.item.action;
+package com.azortis.azortislib.inventory.object;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
+import java.util.Arrays;
 
-public interface ItemAction {
-    boolean action(Player player, ClickType type);
+public abstract class InventoryLayout {
+    protected InventoryItem[] item;
+
+    public InventoryLayout setSize(int size) {
+        if (item != null)
+            item = Arrays.copyOf(item, size);
+        else item = new InventoryItem[size];
+        return this;
+    }
+
+    public InventoryItem[] getLayout() {
+        return item;
+    }
+
 }

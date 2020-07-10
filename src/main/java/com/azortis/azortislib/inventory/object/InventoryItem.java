@@ -16,39 +16,45 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.azortis.azortislib.inventory.item;
+package com.azortis.azortislib.inventory.object;
 
-import com.azortis.azortislib.inventory.item.action.ItemAction;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryItem extends ItemStack {
-    private ItemAction action;
+    private Action<InventoryClickEvent> action;
 
-    @Override
-    public InventoryItem clone() {
-        InventoryItem stack = (InventoryItem) super.clone();
-        stack.action = action;
-        return stack;
-
+    public InventoryItem(Material type, Action<InventoryClickEvent> action) {
+        super(type);
+        this.action = action;
     }
-    public InventoryItem(ItemStack stack, ItemAction action) throws IllegalArgumentException {
+
+    public InventoryItem(Material type, int amount, Action<InventoryClickEvent> action) {
+        super(type, amount);
+        this.action = action;
+    }
+
+    public InventoryItem(ItemStack stack, Action<InventoryClickEvent> action) throws IllegalArgumentException {
         super(stack);
         this.action = action;
     }
 
 
-    public InventoryItem(Material type, ItemAction action) {
-        super(type);
+    public void useAction(InventoryClickEvent event) {
+        action.action(event);
+    }
+
+
+    public void setAction(Action<InventoryClickEvent> action) {
         this.action = action;
     }
 
-    public InventoryItem(Material type, int amount, ItemAction action) {
-        super(type, amount);
-        this.action = action;
-    }
-
-    public ItemAction getAction() {
-        return action;
+    public void setItemStack(ItemStack stack) {
+        setType(stack.getType());
+        setAmount(stack.getAmount());
+        if (stack.hasItemMeta()) {
+            setItemMeta(stack.getItemMeta());
+        }
     }
 }
